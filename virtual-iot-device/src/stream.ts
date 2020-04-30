@@ -16,7 +16,7 @@ export function createStreamFromDataset(params: CreateStream): Observable<any> {
         throw new Error('Frequency must be positive');
     }
 
-    if (params.dataset.length < 0) {
+    if (params.dataset.length <= 0) {
         throw new Error('Dataset must not be empty');
     }
 
