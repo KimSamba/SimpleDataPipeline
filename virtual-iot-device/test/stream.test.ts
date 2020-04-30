@@ -80,4 +80,14 @@ describe('CreateStreamFromDataset Repeat parameter', () => {
             expectObservable(obs$).toBe('1ms 12(3|)', vals);
         });
     });
+
+    it('Dataset size = 0 should throw error', async () => {
+        expect(() =>
+            createStreamFromDataset({
+                dataset: [],
+                frequency_hz: 1000,
+                repeat: false,
+            })
+        ).toThrowError();
+    });
 });
