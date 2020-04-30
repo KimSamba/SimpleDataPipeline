@@ -1,24 +1,35 @@
 import {of, Observable, from} from 'rxjs';
-import * as assert from 'assert';
 import {delay, concatMap, repeat} from 'rxjs/operators';
 
-interface CreateStream<T> {
-    dataset: T[];
+interface CreateStream {
+    dataset: any[];
     frequency_hz: number;
-    repeat?: number;
+    repeat?: boolean;
 }
 
 /**
  * Create an observable stream from an array of items and
  * emits at given frequency
  */
-export function createStreamFromDataset<T>(
-    params: CreateStream<T>
-): Observable<T> {
-    assert.notEqual(params.repeat! <= 0, true);
-    const nbRepeat = params.repeat! >= 0 ? params.repeat : undefined;
-    return from(params.dataset).pipe(
-        concatMap(x => of<T>(x).pipe(delay(1000 / params.frequency_hz))),
-        repeat(nbRepeat)
+export function createStreamFromDataset(params: CreateStream): Observable<any> {
+    if (params.frequency_hz < 0) {
+        throw new Error('Frequency must be positive');
+    }
+
+    if (params.dataset.length < 0) {
+        throw new Error('Dataset must not be empty');
+    }
+
+    const obs$ = from(params.dataset).pipe(
+        throttleFrequency(params.frequency_hz)
     );
+
+    return params.repeat ? obs$.pipe(repeat()) : obs$;
 }
+
+export const throttleFrequency = (frequency_hz: number) => {
+    if (frequency_hz <= 0) {
+        throw new Error('Frequency must be strictly positive');
+    }
+    return concatMap(x => of(x).pipe(delay(1000 / frequency_hz)));
+};

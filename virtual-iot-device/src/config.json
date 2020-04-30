@@ -1,10 +1,10 @@
 {
     "dataSetUrl": "https://query.data.world/s/azf67yuslxfmttps3f2sfrm3t4x4ya",
-    "dataEmissionFrequency_hz": 30,
-    "repeat": 100,
+    "dataEmissionFrequency_hz": 3,
+    "repeat": true,
     "sensorName": "SensorA",
     "iotConfig": {
-        "endpoint": "a2mv6dxyqms3fr-ats.iot.us-east-1.amazonaws.com",
+        "endpoint": "a37iy7vk7r5up1-ats.iot.us-east-1.amazonaws.com",
         "region": "us-east-1"
     }
 }
