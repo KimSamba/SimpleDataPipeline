@@ -1,0 +1,37 @@
+service:
+  name: RiverFishSensorDataStream
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  role: LambdaRole
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    APPLICATION: RiverFishSensorDataStream
+    TABLE_NAME: RiverFishSensorAggregateData
+    OUTPUT_KINESIS_ARN: ${ssm:stream-output-arn}
+
+functions:
+  saveAggregateToDynamoDb:
+    handler: src/handler.saveAggregateData
+    events:
+      - stream: 
+          type: kinesis
+          arn: ${self:provider.environment.OUTPUT_KINESIS_ARN}
+          batchSize: 10
+          startingPosition: LATEST
+ 
+
+resources:
+  - ${file(resources/iam.yml)}
+  - ${file(resources/ddb-tables.yml)}
