@@ -70,17 +70,19 @@ resource "aws_kinesis_analytics_application" "app" {
 
   code = <<EOF
 CREATE OR REPLACE STREAM "${var.application}_output" (
-    county           VARCHAR(64), 
-    county_count     INTEGER);
+    "Timestamp"   TIMESTAMP,
+    "County"          VARCHAR(64),
+    "CountyCount"     INTEGER);
 
 CREATE OR REPLACE PUMP "STREAM_PUMP" AS 
   INSERT INTO "${var.application}_output" 
     SELECT STREAM 
-        "County" as county,
-        COUNT("County") AS county_count
+        FLOOR("COL_Timestamp" TO MINUTE) as "Timestamp",
+        "County",
+        COUNT("County") AS "CountyCount"
     FROM "${var.application}_001"
-    GROUP BY "County", STEP("${var.application}_001".ROWTIME BY INTERVAL '${var.aggregation_interval}' SECOND);
-      
+    WINDOWED BY STAGGER (
+            PARTITION BY FLOOR("COL_Timestamp" TO MINUTE), "County" RANGE INTERVAL '${var.aggregation_interval}' SECOND);
 EOF
 
   inputs {
@@ -93,7 +95,63 @@ EOF
       record_columns {
         mapping  = "$.County"
         name     = "County"
-        sql_type = "VARCHAR(50)"
+        sql_type = "VARCHAR(16)"
+      }
+
+      record_columns {
+        mapping  = "$.Fish_Species_Present_at_Waterbody"
+        name     = "Fish_Species_Present_at_Waterbody"
+        sql_type = "VARCHAR(256)"
+      }
+      record_columns {
+        mapping  = "$.Comments"
+        name     = "Comments"
+        sql_type = "VARCHAR(128)"
+      }
+      record_columns {
+        mapping  = "$.Special_Regulations_on_Waterbody"
+        name     = "Special_Regulations_on_Waterbody"
+        sql_type = "VARCHAR(64)"
+      }
+      record_columns {
+        mapping  = "$.$.Waterbody_Name"
+        name     = "$.Waterbody_Name"
+        sql_type = "VARCHAR(64)"
+      }
+      record_columns {
+        mapping  = "$.Types_of_Public_Access"
+        name     = "Types_of_Public_Access"
+        sql_type = "VARCHAR(64)"
+      }
+      record_columns {
+        mapping  = "$.Public_Fishing_Access_Owner"
+        name     = "Public_Fishing_Access_Owner"
+        sql_type = "VARCHAR(64)"
+      }
+      record_columns {
+        mapping  = "$.Waterbody_Information"
+        name     = "Waterbody_Information"
+        sql_type = "VARCHAR(64)"
+      }
+      record_columns {
+        mapping  = "$.Longitude"
+        name     = "Longitude"
+        sql_type = "DOUBLE"
+      }
+      record_columns {
+        mapping  = "$.Latitude"
+        name     = "Latitude"
+        sql_type = "DOUBLE"
+      }
+      record_columns {
+        mapping  = "$.Location[0:]"
+        name     = "Location"
+        sql_type = "VARCHAR(32)"
+      }
+      record_columns {
+        mapping  = "$.Timestamp"
+        name     = "COL_Timestamp"
+        sql_type = "TIMESTAMP"
       }
 
       record_encoding = "UTF-8"
@@ -137,6 +195,6 @@ resource "aws_ssm_parameter" "stream_output_arn" {
 
 resource "null_resource" "start_application" {
   provisioner "local-exec" {
-    command = "aws kinesisanalytics start-application --application-name ${aws_kinesis_analytics_application.app.name} --input-configurations Id=string,InputStartingPositionConfiguration={InputStartingPosition=NOW}"
+    command = "aws kinesisanalytics start-application --application-name ${aws_kinesis_analytics_application.app.name} --input-configurations Id=${var.application}_001,InputStartingPositionConfiguration={InputStartingPosition=NOW}"
   }
 }
