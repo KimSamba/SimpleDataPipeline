@@ -17,8 +17,11 @@ export class Publisher {
     publish(payload: RiverData) {
         return this.iot
             .publish({
-                topic: this.sensorName,
-                payload: JSON.stringify(payload),
+                topic: `sensors/${this.sensorName}`,
+                payload: JSON.stringify({
+                    ...payload,
+                    Timestamp: new Date(),
+                }),
             })
             .promise();
     }
