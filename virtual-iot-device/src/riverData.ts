@@ -29,20 +29,25 @@ export interface RiverDataRaw {
  */
 export function preprocessData(input: RiverDataRaw): RiverData {
     return {
-        ...removeSpacesFromKeys(input),
+        ...replaceSpacesFromKeys(input, '_'),
         Longitude: Number(input.Longitude),
         Latitude: Number(input.Latitude),
         Location: input.Location.replace(/[()]/g, '')
             .split(',')
             .map(Number) as [number, number],
-    };
+    } as RiverData;
 }
 
-function removeSpacesFromKeys(input: RiverDataRaw) {
+export function replaceSpacesFromKeys(
+    input: {
+        [key: string]: any;
+    },
+    replacement: string
+): {[key: string]: any} {
     return Object.fromEntries(
         Object.entries(input).map(([key, val]) => [
-            key.replace(/\s/g, '_'),
+            key.replace(/\s/g, replacement),
             val,
         ])
-    ) as RiverData;
+    );
 }
