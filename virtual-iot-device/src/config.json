@@ -3,8 +3,6 @@
     "dataEmissionFrequency_hz": 3,
     "repeat": true,
     "sensorName": "SensorA",
-    "iotConfig": {
-        "endpoint": "a37iy7vk7r5up1-ats.iot.us-east-1.amazonaws.com",
-        "region": "us-east-1"
-    }
+    "region": "us-east-1",
+    "iotEndpoint": ""
 }
