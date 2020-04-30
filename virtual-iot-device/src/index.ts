@@ -13,7 +13,7 @@ async function start() {
 
     if (!endpointAddress) {
         const iot = new Iot({
-            region: config.region,
+            region: process.env.AWS_DEFAULT_REGION || config.region,
         });
         ({endpointAddress} = await iot
             .describeEndpoint({
@@ -31,7 +31,7 @@ async function start() {
     const publisher = new Publisher({
         config: {
             endpoint: endpointAddress,
-            region: config.region,
+            region: process.env.AWS_DEFAULT_REGION || config.region,
         },
         sensorName: config.sensorName,
     });
@@ -42,3 +42,8 @@ async function start() {
 }
 
 start();
+
+process.on('SIGINT', () => {
+    // eslint-disable-next-line no-process-exit
+    process.exit(0);
+});
