@@ -1,4 +1,4 @@
 shard_count = 1
 application = "RiverFishPipeline"
 topic_prefix = "sensors"
-aggregation_interval = 60
+aggregation_interval = 300
