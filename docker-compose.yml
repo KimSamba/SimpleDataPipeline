@@ -1,0 +1,12 @@
+version: '3'
+services:
+  virtual-iot-device:
+    build: ./virtual-iot-device
+    environment:
+        DATA_SET_URL: https://query.data.world/s/azf67yuslxfmttps3f2sfrm3t4x4ya
+        DATA_EMISSION_FREQUENCY_HZ: 10
+        SENSOR_NAME: SensorA
+        AWS_REGION: us-east-1
+        IOT_ENDPOINT: '' # If not defined, will be inferred in application using SDK
+        AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+        AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}

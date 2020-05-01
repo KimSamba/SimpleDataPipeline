@@ -1,8 +1,0 @@
-{
-    "dataSetUrl": "https://query.data.world/s/azf67yuslxfmttps3f2sfrm3t4x4ya",
-    "dataEmissionFrequency_hz": 3,
-    "repeat": true,
-    "sensorName": "SensorA",
-    "region": "us-east-1",
-    "iotEndpoint": ""
-}

@@ -2,7 +2,7 @@
 OLDPWD=$(pwd)
 
 cd virtual-iot-device
-docker build -t iotdevice .
+docker-compose build
 
 function atexit() { cd "$OLDPWD"; }
 trap atexit EXIT

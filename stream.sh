@@ -8,14 +8,11 @@ do
         section=$key
     elif [[ $value ]] && [[ $section == '[default]' ]]; then
         if [[ $key == 'aws_access_key_id' ]]; then
-            AWS_ACCESS_KEY_ID=$value
+            export AWS_ACCESS_KEY_ID=$value
         elif [[ $key == 'aws_secret_access_key' ]]; then
-            AWS_SECRET_ACCESS_KEY=$value
+            export AWS_SECRET_ACCESS_KEY=$value
         fi
     fi
 done < $INI_FILE
 
-docker run \
-    -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-    -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-    iotdevice
+docker-compose up
