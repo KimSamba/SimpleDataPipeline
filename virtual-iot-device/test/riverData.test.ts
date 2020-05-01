@@ -32,39 +32,3 @@ describe('replaceSpacesFromKeys', () => {
         expect(replaceSpacesFromKeys(obj2, '_')).toEqual(obj2Expected);
     });
 });
-
-// describe('CreateStreamFromDataset Repeat parameter', () => {
-//     it('Repeat = true should replay undefinitely', async () => {
-//         testScheduler().run(({expectObservable}) => {
-//             const obs$ = createStreamFromDataset({
-//                 dataset: [1, 2, 3],
-//                 frequency_hz: 1000,
-//                 repeat: true,
-//             }).pipe(take(15));
-
-//             expectObservable(obs$).toBe('1ms 123 123 123 123 12(3|)', vals);
-//         });
-//     });
-
-//     it('Repeat = false should play data only once and complete', async () => {
-//         testScheduler().run(({expectObservable}) => {
-//             const obs$ = createStreamFromDataset({
-//                 dataset: [1, 2, 3],
-//                 frequency_hz: 1000,
-//                 repeat: false,
-//             });
-
-//             expectObservable(obs$).toBe('1ms 12(3|)', vals);
-//         });
-//     });
-
-//     it('Dataset size = 0 should throw error', async () => {
-//         expect(() =>
-//             createStreamFromDataset({
-//                 dataset: [],
-//                 frequency_hz: 1000,
-//                 repeat: false,
-//             })
-//         ).toThrowError();
-//     });
-// });
