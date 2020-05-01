@@ -1,5 +1,6 @@
 import {of, Observable, from} from 'rxjs';
-import {delay, concatMap, repeat} from 'rxjs/operators';
+import {delay, concatMap, repeat, toArray, map, tap} from 'rxjs/operators';
+import * as shuffle from 'shuffle-array';
 
 interface CreateStream {
     dataset: any[];
@@ -21,6 +22,7 @@ export function createStreamFromDataset(params: CreateStream): Observable<any> {
     }
 
     const obs$ = from(params.dataset).pipe(
+        randomizeOrder(),
         throttleFrequency(params.frequency_hz)
     );
 
@@ -33,3 +35,10 @@ export const throttleFrequency = (frequency_hz: number) => {
     }
     return concatMap(x => of(x).pipe(delay(1000 / frequency_hz)));
 };
+
+export const randomizeOrder = () => (source$: Observable<any>) =>
+    source$.pipe(
+        toArray(),
+        map(x => shuffle(x, {copy: true})),
+        concatMap(x => x)
+    );

@@ -23,7 +23,7 @@ describe('throttleFrequency', () => {
 
     it('Emits a correct frequencies for n', async () => {
         testScheduler().run(({expectObservable, cold}) => {
-            const obs$ = cold('1 2 3', vals);
+            const obs$ = cold('1 1 1', vals);
             const freq1000hz$ = obs$.pipe(throttleFrequency(1000));
             const freq50hz$ = obs$.pipe(throttleFrequency(50));
             const freq10hz$ = obs$.pipe(throttleFrequency(10));
@@ -32,23 +32,23 @@ describe('throttleFrequency', () => {
 
             /* eslint-disable prettier/prettier */
             expectObservable(freq1000hz$).toBe(
-                '1ms   1        2         3',
+                '1ms   1        1         1',
                 vals
             );
             expectObservable(freq50hz$).toBe(
-                '20ms  1 19ms   2 19ms    3',
+                '20ms  1 19ms   1 19ms    1',
                 vals
             );
             expectObservable(freq10hz$).toBe(
-                '100ms 1 99ms   2 99ms    3',
+                '100ms 1 99ms   1 99ms    1',
                 vals
             );
             expectObservable(freq1hz$).toBe(
-                '1s    1 999ms  2 999ms   3',
+                '1s    1 999ms  1 999ms   1',
                 vals
             );
             expectObservable(freqVeryLow$).toBe(
-                '10s   1 9999ms 2 9999ms  3',
+                '10s   1 9999ms 1 9999ms  1',
                 vals
             );
             /* eslint-enable prettier/prettier */
@@ -60,24 +60,24 @@ describe('CreateStreamFromDataset Repeat parameter', () => {
     it('Repeat = true should replay undefinitely', async () => {
         testScheduler().run(({expectObservable}) => {
             const obs$ = createStreamFromDataset({
-                dataset: [1, 2, 3],
+                dataset: [1, 1, 1],
                 frequency_hz: 1000,
                 repeat: true,
             }).pipe(take(15));
 
-            expectObservable(obs$).toBe('1ms 123 123 123 123 12(3|)', vals);
+            expectObservable(obs$).toBe('1ms 111 111 111 111 11(1|)', vals);
         });
     });
 
     it('Repeat = false should play data only once and complete', async () => {
         testScheduler().run(({expectObservable}) => {
             const obs$ = createStreamFromDataset({
-                dataset: [1, 2, 3],
+                dataset: [1, 1, 1],
                 frequency_hz: 1000,
                 repeat: false,
             });
 
-            expectObservable(obs$).toBe('1ms 12(3|)', vals);
+            expectObservable(obs$).toBe('1ms 11(1|)', vals);
         });
     });
 
