@@ -95,7 +95,7 @@ If you cannot use the AWS CLI to start the data analytics application (for examp
 ```hcl
 resource "null_resource" "start_application" {
   provisioner "local-exec" {
-    command = "aws kinesisanalytics start-application --application-name ${aws_kinesis_analytics_application.app.name} --input-configurations Id=${var.application}_001,InputStartingPositionConfiguration={InputStartingPosition=NOW}"
+    command = "aws kinesisanalytics start-application --application-name ${aws_kinesis_analytics_application.app.name} --input-configurations Id=1.1,InputStartingPositionConfiguration={InputStartingPosition=NOW}"
   }
 }
 ```
