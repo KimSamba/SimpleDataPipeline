@@ -5,7 +5,7 @@ variable "shard_count" {
 
 variable "aggregation_interval" {
     type = number
-    description = "Interval to aggregate the last data in seconds"
+    description = "Interval to aggregate the last data in minutes"
 }
 
 variable "application" {

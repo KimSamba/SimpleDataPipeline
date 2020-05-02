@@ -82,7 +82,7 @@ CREATE OR REPLACE PUMP "STREAM_PUMP" AS
         COUNT("County") AS "CountyCount"
     FROM "${var.application}_001"
     WINDOWED BY STAGGER (
-            PARTITION BY FLOOR("COL_Timestamp" TO MINUTE), "County" RANGE INTERVAL '${var.aggregation_interval}' SECOND);
+            PARTITION BY FLOOR("COL_Timestamp" TO MINUTE), "County" RANGE INTERVAL '${var.aggregation_interval}' MINUTE);
 EOF
 
   inputs {
@@ -195,6 +195,6 @@ resource "aws_ssm_parameter" "stream_output_arn" {
 
 resource "null_resource" "start_application" {
   provisioner "local-exec" {
-    command = "aws kinesisanalytics start-application --application-name ${aws_kinesis_analytics_application.app.name} --input-configurations Id=${var.application}_001,InputStartingPositionConfiguration={InputStartingPosition=NOW}"
+    command = "aws kinesisanalytics start-application --application-name ${aws_kinesis_analytics_application.app.name} --input-configurations Id=1.1,InputStartingPositionConfiguration={InputStartingPosition=NOW}"
   }
 }
