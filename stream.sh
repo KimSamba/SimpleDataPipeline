@@ -1,5 +1,13 @@
 #!/bin/bash
 
+set -e
+
+if ! command -v docker-compose > /dev/null 2>&1
+then
+    echo "docker-compose is not installed. It is required for running this application"
+    exit 1
+fi
+
 INI_FILE=~/.aws/credentials
 
 while IFS=' = ' read key value
