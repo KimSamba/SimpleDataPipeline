@@ -103,3 +103,12 @@ resource "null_resource" "start_application" {
 This will try to run the CLI to start the application (currently not supported in Terraform and there is a PR for this: https://github.com/terraform-providers/terraform-provider-aws/issues/7383)
 
 You must remove this block if you cannot start the data analytics application programmatically, then rerun deploy.sh, and launch the Data Analaytics Application manually like described in the aforemented issue.
+
+#### Processing
+
+The data will be processed in real time as data comes.
+If you go to the AWS Console, you can check the processing done in real time, and on dynamodb when the data is outputted (every window of 5 minutes).
+
+![screen1](docs/data-analytics-realtime.png)
+
+![screen2](docs/dynamodb-result.png)
